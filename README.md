@@ -11,10 +11,39 @@ To deploy the Flamenco render farm infrastructure using Terraform:
 1.  **Install prerequisites:**
     Ensure you have the [Terraform CLI installed](https://developer.hashicorp.com/terraform/downloads) and the [Google Cloud CLI installed](https://cloud.google.com/sdk/docs/install).
 
-2.  **Authenticate to Google Cloud:**
+2.  **Create or use an existing GCP project:**
+    Terraform expects an existing Google Cloud project. If you don't already have one, you can create it using the `gcloud` CLI.
+    
+    <details>
+    <summary><b>Click here for step-by-step instructions to create a project via CLI</b></summary>
+    
+    **2.1 Authenticate to Google Cloud:**
     ```bash
     gcloud auth application-default login
     ```
+    
+    **2.2 Create a Google Cloud Project:**
+    Replace `your-desired-project-id` with a globally unique ID:
+    ```bash
+    gcloud projects create your-desired-project-id --name="Flamenco Render Farm"
+    ```
+    
+    **2.3 Link the Project to a Billing Account:**
+    First, find your Billing Account ID:
+    ```bash
+    gcloud billing accounts list
+    ```
+    Then, link your new project to that Billing Account ID:
+    ```bash
+    gcloud billing projects link your-desired-project-id --billing-account=YOUR_BILLING_ACCOUNT_ID
+    ```
+    
+    **2.4 Enable the required APIs:**
+    Terraform needs certain Google Cloud APIs enabled to deploy Cloud Run and Cloud Storage. Run the following command:
+    ```bash
+    gcloud services enable run.googleapis.com storage-component.googleapis.com iam.googleapis.com --project=your-desired-project-id
+    ```
+    </details>
 
 3.  **Initialize the Terraform configuration:**
     Navigate to the root directory containing `main.tf` and run:
@@ -25,8 +54,7 @@ To deploy the Flamenco render farm infrastructure using Terraform:
 4.  **Configure deployment variables:**
     Create a `terraform.tfvars` file or prepare to provide these variables when prompted. The necessary variables are:
     ```hcl
-    project_id      = "your-desired-project-id"   # The ID for your new project
-    billing_account = "YOUR_BILLING_ACCOUNT_ID"   # Alphanumeric billing ID
+    project_id      = "your-desired-project-id"   # The ID of the project you just created
     # region        = "europe-west1"              # Optional, defaults to europe-west1
     # manager_image = "steren/flamenco-manager:latest" # Optional, custom manager image
     # worker_image  = "steren/flamenco-worker:latest"  # Optional, custom worker image
@@ -41,7 +69,7 @@ To deploy the Flamenco render farm infrastructure using Terraform:
     ```bash
     terraform apply
     ```
-    Type `yes` when prompted to create the GCP project, deploy the Cloud Storage bucket, provision the service account, and deploy the Cloud Run services.
+    Type `yes` when prompted to deploy the Cloud Storage bucket, provision the service account, and deploy the Cloud Run services inside your project.
 
 ## Building and Pushing container images
 
