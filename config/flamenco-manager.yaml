@@ -1,0 +1,33 @@
+_meta:
+  version: 3
+manager_name: Flamenco Cloud Run
+database: sqlite:///mnt/shared-bucket/data/flamenco-manager.sqlite
+listen: 0.0.0.0:8080
+autodiscoverable: false
+
+# Store manager files on the shared bucket so state persists across restarts
+local_manager_storage_path: /mnt/shared-bucket/data/manager_storage
+shared_storage_path: /mnt/shared-bucket/data
+
+shaman:
+  enabled: true
+  garbageCollect:
+    period: 24h0m0s
+    maxAge: 744h0m0s # 31 days
+
+task_timeout: 10m0s
+worker_timeout: 1m0s
+blocklist_threshold: 3
+task_fail_after_softfail_count: 3
+
+variables:
+  # This points to the Blender executable installed inside the worker Docker container
+  blender:
+    values:
+      - platform: linux
+        value: /usr/local/blender/blender
+  
+  blenderArgs:
+    values:
+      - platform: all
+        value: -b -y -P {framerange_setup_script} -- {format_args} {render_args} {pass_args} {post_render_args}

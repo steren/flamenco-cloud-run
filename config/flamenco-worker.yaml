@@ -1,0 +1,9 @@
+# We point the worker to the Cloud Run Service URL. 
+# REPLACE THIS with the actual URL of your deployed Flamenco Manager Cloud Run service.
+manager_url: https://app-service-YOUR_PROJECT_HASH-uc.a.run.app
+
+# By default workers can handle any task type. 
+task_types:
+  - blender
+  - ffmpeg
+  - file-management
