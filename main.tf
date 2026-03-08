@@ -132,10 +132,11 @@ resource "google_cloud_run_v2_service" "flamenco_manager" {
 
 # 3. Cloud Run Worker Pool
 resource "google_cloud_run_v2_worker_pool" "flamenco_worker" {
-  project  = var.project_id
-  name     = "flamenco-worker-pool"
-  location = var.region
-  depends_on = [google_project_service.run_api]
+  project      = var.project_id
+  name         = "flamenco-worker-pool"
+  location     = var.region
+  launch_stage = "BETA"
+  depends_on   = [google_project_service.run_api]
 
   template {
     service_account = google_service_account.flamenco_sa.email
