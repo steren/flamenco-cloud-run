@@ -1,9 +1,6 @@
-# flamenco-cloud-run
-Run Flamenco render farm on Cloud Run
+# Run Flamenco render farm on Cloud Run
 
 > **⚠️ WARNING**: The Terraform configuration, Dockerfiles, and Flamenco configuration in this repository have **NOT BEEN TESTED**. They are meant as a starting block for deploying Flamenco to Google Cloud Run and will require manual validation and adjustments.
-
-## Overview
 
 This repository contains the infrastructure as code, Dockerfiles, and configuration to run the [Flamenco Render Farm](https://flamenco.blender.org/) on Google Cloud Run.
 
