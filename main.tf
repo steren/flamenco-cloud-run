@@ -44,12 +44,14 @@ resource "google_project" "flamenco_project" {
 
 # 1. Service Account
 resource "google_service_account" "flamenco_sa" {
+  project      = google_project.flamenco_project.project_id
   account_id   = "flamenco-runner"
   display_name = "Flamenco Cloud Run Service Account"
   description  = "Service account used by Flamenco Manager and Worker to access GCS"
 }
 # 1. Cloud Storage Bucket
 resource "google_storage_bucket" "flamenco_storage" {
+  project       = google_project.flamenco_project.project_id
   name          = "flamenco-shared-bucket" # Must be globally unique
   location      = var.region
 
@@ -82,6 +84,7 @@ resource "google_storage_bucket_object" "worker_config" {
 
 # 2. Cloud Run Service (Autoscales from 0 to 1)
 resource "google_cloud_run_v2_service" "flamenco_manager" {
+  project  = google_project.flamenco_project.project_id
   name     = "flamenco-manager"
   location = var.region
   ingress  = "INGRESS_TRAFFIC_ALL"
@@ -116,6 +119,7 @@ resource "google_cloud_run_v2_service" "flamenco_manager" {
 
 # 3. Cloud Run Worker Pool
 resource "google_cloud_run_v2_worker_pool" "flamenco_worker" {
+  project  = google_project.flamenco_project.project_id
   name     = "flamenco-worker-pool"
   location = var.region
 
