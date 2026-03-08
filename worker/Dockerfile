@@ -38,6 +38,7 @@ RUN wget -qO- ${FLAMENCO_URL} | tar -xz -C /opt && \
 
 # Provide the path to the Blender executable in the environment
 ENV BLENDER_EXECUTABLE="/usr/local/blender/blender"
+ENV PATH="/usr/local/blender:${PATH}"
 
 # The working directory is intended to be overridden by Cloud Run to /mnt/shared-bucket/config
 WORKDIR /opt/flamenco
