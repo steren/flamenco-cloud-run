@@ -5,12 +5,7 @@ Run Flamenco render farm on Cloud Run
 
 ## Overview
 
-This repository contains infrastructure as code and containerization instructions to deploy the [Flamenco Render Farm](https://flamenco.blender.org/) over Google Cloud:
-
-*   **`main.tf`**: A Terraform configuration that provisions a GCS bucket, an IAM service account, a Cloud Run Service (for Flamenco Manager), and a Cloud Run Worker Pool (for Flamenco Worker nodes). The service and worker pool mount the same Google Cloud Storage bucket.
-*   **`manager/Dockerfile`**: A Docker container definition for Flamenco Manager.
-*   **`worker/Dockerfile`**: A Docker container definition for Flamenco Worker that includes Blender.
-*   **`config/`**: Directory containing the base `flamenco-manager.yaml` and `flamenco-worker.yaml` files, which are automatically uploaded to the GCS bucket during `terraform apply`.
+This repository contains the infrastructure as code, Dockerfiles, and configuration to run the [Flamenco Render Farm](https://flamenco.blender.org/) on Google Cloud Run.
 
 ## Deployment via Terraform
 
@@ -48,3 +43,13 @@ To deploy the Flamenco render farm infrastructure using Terraform:
     terraform apply
     ```
     Type `yes` when prompted to create the GCP project, deploy the Cloud Storage bucket, provision the service account, and deploy the Cloud Run services.
+
+## Building and Pushing container images
+
+If you want to build the container images yourself rather than using the default ones, we have provided a single script to build and push them to dockerhub. Run this script:
+
+```bash
+./build-and-push.sh
+```
+
+*Note: By default the script pushes to `steren`. You'll need to update the `REGISTRY` variable inside `build-and-push.sh` to point to a registry you can push to, and then update the `manager_image` and `worker_image` default variables in `main.tf`.*

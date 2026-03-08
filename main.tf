@@ -23,6 +23,18 @@ variable "billing_account" {
   type        = string
 }
 
+variable "manager_image" {
+  description = "The container image to use for Flamenco Manager"
+  type        = string
+  default     = "steren/flamenco-manager:latest"
+}
+
+variable "worker_image" {
+  description = "The container image to use for Flamenco Worker"
+  type        = string
+  default     = "steren/flamenco-worker:latest"
+}
+
 # 0. Create GCP Project
 resource "google_project" "flamenco_project" {
   name            = "Flamenco"
@@ -83,7 +95,7 @@ resource "google_cloud_run_v2_service" "flamenco_manager" {
     }
 
     containers {
-      image = "us-docker.pkg.dev/YOUR_PROJECT/REPO/flamenco-manager:latest" # Replace with your Flamenco Manager image
+      image = var.manager_image
       working_dir = "/mnt/shared-bucket/config"
 
       volume_mounts {
@@ -115,7 +127,7 @@ resource "google_cloud_run_v2_worker_pool" "flamenco_worker" {
     }
 
     containers {
-      image = "us-docker.pkg.dev/YOUR_PROJECT/REPO/flamenco-worker:latest" # Replace with your Flamenco Worker image
+      image = var.worker_image
       working_dir = "/mnt/shared-bucket/config"
       
       volume_mounts {
