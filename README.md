@@ -11,3 +11,40 @@ This repository contains infrastructure as code and containerization instruction
 *   **`manager/Dockerfile`**: A Docker container definition for Flamenco Manager.
 *   **`worker/Dockerfile`**: A Docker container definition for Flamenco Worker that includes Blender.
 *   **`config/`**: Directory containing the base `flamenco-manager.yaml` and `flamenco-worker.yaml` files, which are automatically uploaded to the GCS bucket during `terraform apply`.
+
+## Deployment via Terraform
+
+To deploy the Flamenco render farm infrastructure using Terraform:
+
+1.  **Install prerequisites:**
+    Ensure you have the [Terraform CLI installed](https://developer.hashicorp.com/terraform/downloads) and the [Google Cloud CLI installed](https://cloud.google.com/sdk/docs/install).
+
+2.  **Authenticate to Google Cloud:**
+    ```bash
+    gcloud auth application-default login
+    ```
+
+3.  **Initialize the Terraform configuration:**
+    Navigate to the root directory containing `main.tf` and run:
+    ```bash
+    terraform init
+    ```
+
+4.  **Configure deployment variables:**
+    Create a `terraform.tfvars` file or prepare to provide these variables when prompted. The necessary variables are:
+    ```hcl
+    project_id      = "your-desired-project-id"   # The ID for your new project
+    billing_account = "YOUR_BILLING_ACCOUNT_ID"   # Alphanumeric billing ID
+    # region        = "europe-west1"              # Optional, defaults to europe-west1
+    ```
+
+5.  **Review the deployment plan:**
+    ```bash
+    terraform plan
+    ```
+
+6.  **Apply the configuration:**
+    ```bash
+    terraform apply
+    ```
+    Type `yes` when prompted to create the GCP project, deploy the Cloud Storage bucket, provision the service account, and deploy the Cloud Run services.

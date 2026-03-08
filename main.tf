@@ -13,6 +13,23 @@ variable "region" {
   default     = "europe-west1"
 }
 
+variable "project_id" {
+  description = "The GCP Project ID to create"
+  type        = string
+}
+
+variable "billing_account" {
+  description = "The alphanumeric ID of the billing account this project belongs to"
+  type        = string
+}
+
+# 0. Create GCP Project
+resource "google_project" "flamenco_project" {
+  name            = "Flamenco"
+  project_id      = var.project_id
+  billing_account = var.billing_account
+}
+
 # 1. Service Account
 resource "google_service_account" "flamenco_sa" {
   account_id   = "flamenco-runner"
