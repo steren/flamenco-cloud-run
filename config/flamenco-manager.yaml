@@ -2,6 +2,7 @@ _meta:
   version: 3
 manager_name: Flamenco Cloud Run
 database: sqlite:///mnt/shared-bucket/data/flamenco-manager.sqlite
+database_check_period: 2m0s
 listen: 0.0.0.0:8080
 autodiscoverable: false
 
