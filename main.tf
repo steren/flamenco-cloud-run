@@ -122,10 +122,6 @@ resource "google_cloud_run_v2_worker_pool" "flamenco_worker" {
   template {
     service_account = google_service_account.flamenco_sa.email
 
-    scaling {
-      instance_count = 1
-    }
-
     containers {
       image = var.worker_image
       working_dir = "/mnt/shared-bucket/config"
@@ -143,5 +139,9 @@ resource "google_cloud_run_v2_worker_pool" "flamenco_worker" {
         read_only = false
       }
     }
+  }
+
+  scaling {
+    manual_instance_count = 1
   }
 }
