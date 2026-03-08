@@ -28,6 +28,8 @@ To deploy the Flamenco render farm infrastructure using Terraform:
     project_id      = "your-desired-project-id"   # The ID for your new project
     billing_account = "YOUR_BILLING_ACCOUNT_ID"   # Alphanumeric billing ID
     # region        = "europe-west1"              # Optional, defaults to europe-west1
+    # manager_image = "steren/flamenco-manager:latest" # Optional, custom manager image
+    # worker_image  = "steren/flamenco-worker:latest"  # Optional, custom worker image
     ```
 
 5.  **Review the deployment plan:**
