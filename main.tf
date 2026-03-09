@@ -100,7 +100,11 @@ resource "google_cloud_run_v2_service" "flamenco_manager" {
   name     = "flamenco-manager"
   location = var.region
   ingress  = "INGRESS_TRAFFIC_ALL"
-  depends_on = [google_project_service.run_api]
+  depends_on = [
+    google_project_service.run_api,
+    google_storage_bucket_object.manager_config,
+    google_storage_bucket_iam_member.flamenco_sa_storage_binding
+  ]
 
   template {
     service_account = google_service_account.flamenco_sa.email
@@ -135,7 +139,11 @@ resource "google_cloud_run_v2_worker_pool" "flamenco_worker" {
   name         = "flamenco-worker-pool"
   location     = var.region
   launch_stage = "BETA"
-  depends_on   = [google_project_service.run_api]
+  depends_on   = [
+    google_project_service.run_api,
+    google_storage_bucket_object.worker_config,
+    google_storage_bucket_iam_member.flamenco_sa_storage_binding
+  ]
 
   template {
     service_account = google_service_account.flamenco_sa.email
