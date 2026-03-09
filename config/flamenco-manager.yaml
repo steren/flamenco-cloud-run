@@ -31,4 +31,4 @@ variables:
   blenderArgs:
     values:
       - platform: all
-        value: -b -y -P {framerange_setup_script} -- {format_args} {render_args} {pass_args} {post_render_args}
+        value: -b -y
