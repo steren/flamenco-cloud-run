@@ -24,6 +24,7 @@ RUN apt-get update && \
     libxfixes3 \
     libgl1 \
     libxkbcommon0 \
+    libsm6 \
     && rm -rf /var/lib/apt/lists/*
 
 # Download and install Blender
