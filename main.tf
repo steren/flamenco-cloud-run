@@ -88,9 +88,11 @@ resource "google_storage_bucket_object" "manager_config" {
 
 # Upload the Flamenco Worker Configuration to GCS
 resource "google_storage_bucket_object" "worker_config" {
-  name   = "config/flamenco-worker.yaml"
-  source = "config/flamenco-worker.yaml"
-  bucket = google_storage_bucket.flamenco_storage.name
+  name    = "config/flamenco-worker.yaml"
+  content = templatefile("${path.module}/config/flamenco-worker.yaml.tftpl", {
+    manager_url = google_cloud_run_v2_service.flamenco_manager.uri
+  })
+  bucket  = google_storage_bucket.flamenco_storage.name
 }
 
 
@@ -100,6 +102,10 @@ resource "google_cloud_run_v2_service" "flamenco_manager" {
   name     = "flamenco-manager"
   location = var.region
   ingress  = "INGRESS_TRAFFIC_ALL"
+  
+  # Allow unauthenticated invocations by disabling the IAM check
+  invoker_iam_disabled = true
+  
   depends_on = [
     google_project_service.run_api,
     google_storage_bucket_object.manager_config,
