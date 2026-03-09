@@ -2,7 +2,7 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = ">= 6.0.0" 
+      version = ">= 6.0.0"
     }
   }
 }
@@ -34,20 +34,20 @@ variable "worker_image" {
 
 # 0. Enable APIs
 resource "google_project_service" "run_api" {
-  project = var.project_id
-  service = "run.googleapis.com"
+  project            = var.project_id
+  service            = "run.googleapis.com"
   disable_on_destroy = false
 }
 
 resource "google_project_service" "storage_api" {
-  project = var.project_id
-  service = "storage.googleapis.com"
+  project            = var.project_id
+  service            = "storage.googleapis.com"
   disable_on_destroy = false
 }
 
 resource "google_project_service" "iam_api" {
-  project = var.project_id
-  service = "iam.googleapis.com"
+  project            = var.project_id
+  service            = "iam.googleapis.com"
   disable_on_destroy = false
 }
 
@@ -61,9 +61,9 @@ resource "google_service_account" "flamenco_sa" {
 }
 # 1. Cloud Storage Bucket
 resource "google_storage_bucket" "flamenco_storage" {
-  project       = var.project_id
-  name          = "flamenco-shared-bucket" # Must be globally unique
-  location      = var.region
+  project  = var.project_id
+  name     = "flamenco-shared-bucket" # Must be globally unique
+  location = var.region
 
   force_destroy = true
 
@@ -88,11 +88,11 @@ resource "google_storage_bucket_object" "manager_config" {
 
 # Upload the Flamenco Worker Configuration to GCS
 resource "google_storage_bucket_object" "worker_config" {
-  name    = "config/flamenco-worker.yaml"
+  name = "config/flamenco-worker.yaml"
   content = templatefile("${path.module}/config/flamenco-worker.yaml.tftpl", {
     manager_url = google_cloud_run_v2_service.flamenco_manager.uri
   })
-  bucket  = google_storage_bucket.flamenco_storage.name
+  bucket = google_storage_bucket.flamenco_storage.name
 }
 
 
@@ -102,10 +102,10 @@ resource "google_cloud_run_v2_service" "flamenco_manager" {
   name     = "flamenco-manager"
   location = var.region
   ingress  = "INGRESS_TRAFFIC_ALL"
-  
+
   # Allow unauthenticated invocations by disabling the IAM check
   invoker_iam_disabled = true
-  
+
   depends_on = [
     google_project_service.run_api,
     google_storage_bucket_object.manager_config,
@@ -145,7 +145,7 @@ resource "google_cloud_run_v2_worker_pool" "flamenco_worker" {
   name         = "flamenco-worker-pool"
   location     = var.region
   launch_stage = "BETA"
-  depends_on   = [
+  depends_on = [
     google_project_service.run_api,
     google_storage_bucket_object.worker_config,
     google_storage_bucket_iam_member.flamenco_sa_storage_binding
@@ -156,7 +156,14 @@ resource "google_cloud_run_v2_worker_pool" "flamenco_worker" {
 
     containers {
       image = var.worker_image
-      
+
+      resources {
+        limits = {
+          memory = "32G"
+          cpu    = "8"
+        }
+      }
+
       volume_mounts {
         name       = "gcs-volume"
         mount_path = "/mnt/shared-bucket"
