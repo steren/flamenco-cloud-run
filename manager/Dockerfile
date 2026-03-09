@@ -12,9 +12,7 @@ RUN apt-get update && \
 RUN wget -qO- ${FLAMENCO_URL} | tar -xz -C /opt && \
     mv /opt/flamenco-${FLAMENCO_VERSION}-linux-amd64 /opt/flamenco
 
-# The working directory is intended to be overridden by Cloud Run to /mnt/shared-bucket/config
-# but we set a default here.
-WORKDIR /opt/flamenco
+WORKDIR /mnt/shared-bucket/config
 
 # Expose port (must match the config)
 EXPOSE 8080

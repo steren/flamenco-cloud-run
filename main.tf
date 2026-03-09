@@ -112,7 +112,6 @@ resource "google_cloud_run_v2_service" "flamenco_manager" {
 
     containers {
       image = var.manager_image
-      working_dir = "/mnt/shared-bucket/config"
 
       volume_mounts {
         name       = "gcs-volume"
@@ -143,7 +142,6 @@ resource "google_cloud_run_v2_worker_pool" "flamenco_worker" {
 
     containers {
       image = var.worker_image
-      working_dir = "/mnt/shared-bucket/config"
       
       volume_mounts {
         name       = "gcs-volume"
