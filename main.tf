@@ -180,6 +180,6 @@ resource "google_cloud_run_v2_worker_pool" "flamenco_worker" {
   }
 
   scaling {
-    manual_instance_count = 1
+    manual_instance_count = 10
   }
 }
