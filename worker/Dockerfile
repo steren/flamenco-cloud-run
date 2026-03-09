@@ -7,9 +7,9 @@ ENV FLAMENCO_VERSION="3.8.2"
 ENV FLAMENCO_URL="https://flamenco.blender.org/downloads/flamenco-${FLAMENCO_VERSION}-linux-amd64.tar.gz"
 
 # Blender version to install
-ENV BLENDER_VERSION="4.3.2"
+ENV BLENDER_VERSION="5.0.1"
 ENV BLENDER_TAR="blender-${BLENDER_VERSION}-linux-x64.tar.xz"
-ENV BLENDER_URL="https://download.blender.org/release/Blender4.3/${BLENDER_TAR}"
+ENV BLENDER_URL="https://download.blender.org/release/Blender5.0/${BLENDER_TAR}"
 
 # Install dependencies for downloading and running headless Blender
 RUN apt-get update && \
