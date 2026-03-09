@@ -112,13 +112,13 @@ resource "google_cloud_run_v2_service" "flamenco_manager" {
     google_storage_bucket_iam_member.flamenco_sa_storage_binding
   ]
 
+  scaling {
+    min_instance_count = 0
+    max_instance_count = 1
+  }
+
   template {
     service_account = google_service_account.flamenco_sa.email
-
-    scaling {
-      min_instance_count = 0
-      max_instance_count = 1
-    }
 
     containers {
       image = var.manager_image
